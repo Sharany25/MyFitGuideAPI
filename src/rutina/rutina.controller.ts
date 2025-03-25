@@ -3,7 +3,7 @@ import { RutinaService } from './rutina.service';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
 
-@Controller('rutina')
+@Controller('rutinas')
 export class RutinaController {
   constructor(private readonly rutinaService: RutinaService) {}
 
@@ -19,16 +19,16 @@ export class RutinaController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rutinaService.findOne(+id);
+    return this.rutinaService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRutinaDto: UpdateRutinaDto) {
-    return this.rutinaService.update(+id, updateRutinaDto);
+    return this.rutinaService.update(id, updateRutinaDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.rutinaService.remove(+id);
+    return this.rutinaService.remove(id);
   }
 }
