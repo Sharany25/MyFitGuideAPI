@@ -19,16 +19,16 @@ export class IngredientesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.ingredientesService.findOne(+id);
+    return this.ingredientesService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateIngredienteDto: UpdateIngredienteDto) {
-    return this.ingredientesService.update(+id, updateIngredienteDto);
+    return this.ingredientesService.update(id, updateIngredienteDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.ingredientesService.remove(+id);
+    return this.ingredientesService.remove(id);
   }
 }
