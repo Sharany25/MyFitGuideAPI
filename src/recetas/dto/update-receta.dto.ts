@@ -1,4 +1,20 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateRecetaDto } from './create-receta.dto';
+import { IsString, IsOptional, IsNotEmpty, IsDecimal } from "class-validator";
 
-export class UpdateRecetaDto extends PartialType(CreateRecetaDto) {}
+export class UpdateRecetaDto {
+
+  @IsOptional()
+  @IsString()
+  nombreReceta?: string;
+
+  @IsOptional()
+  @IsString()
+  descripcion?: string;
+
+  @IsOptional()
+  @IsString()
+  costo?: string;
+
+  @IsOptional()
+  @IsDecimal()
+  calorias?: number;
+}
