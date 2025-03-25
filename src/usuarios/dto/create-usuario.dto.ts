@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, IsEmail, IsOptional, IsDateString } from 'class-validator';
 
 export class CreateUsuarioDto {
-  @IsString() // Cambiado de @IsInt() a @IsString()
+  @IsString()
   idUsuario: string;
 
   @IsNotEmpty()
