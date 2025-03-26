@@ -6,9 +6,9 @@ import { Rutina, RutinaSchema } from './schema/rutina.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Rutina.name, schema: RutinaSchema }]), // Importamos el esquema de Rutina
+    MongooseModule.forFeature([{ name: Rutina.name, schema: RutinaSchema }]), 
   ],
-  controllers: [RutinaController], // Registramos el controlador
-  providers: [RutinaService], // Registramos el servicio
+  controllers: [RutinaController],
+  providers: [RutinaService],
 })
 export class RutinaModule {}

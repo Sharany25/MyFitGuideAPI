@@ -13,7 +13,6 @@ export class CreateRecetaDto {
     @IsString()
     descripcion: string;
 
-    //VER EL APARTADO DE PASOS
     @IsNotEmpty()
     @IsString()
     costo: string;
