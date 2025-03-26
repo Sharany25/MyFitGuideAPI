@@ -19,16 +19,16 @@ export class PlanificacionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.planificacionService.findOne(+id);
+    return this.planificacionService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePlanificacionDto: UpdatePlanificacionDto) {
-    return this.planificacionService.update(+id, updatePlanificacionDto);
+    return this.planificacionService.update(id, updatePlanificacionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.planificacionService.remove(+id);
+    return this.planificacionService.remove(id);
   }
 }

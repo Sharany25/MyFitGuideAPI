@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePlanificacionDto } from './create-planificacion.dto';
+import { IsOptional, IsString, IsDate } from "class-validator";
 
-export class UpdatePlanificacionDto extends PartialType(CreatePlanificacionDto) {}
+export class UpdatePlanificacionDto {
+    @IsOptional()
+    @IsString()
+    planificacion?: string;
+
+    @IsOptional()
+    @IsString()
+    grupoMuscular?: string;
+
+    @IsOptional()
+    @IsDate()
+    diaSemana?: Date;
+}
