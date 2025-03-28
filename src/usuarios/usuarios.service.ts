@@ -18,16 +18,14 @@ export class UsuariosService {
     const sequenceDocument = await this.counterModel.findOneAndUpdate(
       { name: sequenceName },
       { $inc: { sequence_value: 1 } },
-      { new: true, upsert: true } // Si no existe, lo crea
+      { new: true, upsert: true }
     );
-    return sequenceDocument.sequence_value; // Asegúrate de usar 'sequence_value' en vez de 'count'
+    return sequenceDocument.sequence_value;
   }
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    // Obtener el próximo ID de usuario
     const nextId = await this.getNextSequenceValue('usuarios');
 
-    // Crear el nuevo usuario con el ID automático
     const createdUsuario = new this.usuariosModel({
       ...createUsuarioDto,
       idUsuario: nextId,
@@ -36,7 +34,6 @@ export class UsuariosService {
     return createdUsuario.save();
   }
 
-  // Otros métodos del servicio
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuariosModel.findByIdAndUpdate(id, updateUsuarioDto, {
       new: true,
