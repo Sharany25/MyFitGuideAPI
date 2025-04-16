@@ -7,11 +7,11 @@ export class UpdateUsuarioDto {
 
   @IsOptional()
   @IsEmail()
-  email?: string;
+  correoElectronico?: string;
 
   @IsOptional()
   @IsDateString()
-  fechaNacimiento?: Date;
+  fechaNacimiento?: string;
 
   @IsOptional()
   @IsString()

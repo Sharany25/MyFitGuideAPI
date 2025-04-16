@@ -10,6 +10,7 @@ import { EjercicioModule } from './ejercicio/ejercicio.module';
 import { RutinaModule } from './rutina/rutina.module';
 import { IngredientesModule } from './ingredientes/ingredientes.module';
 import { RecetasModule } from './recetas/recetas.module';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RecetasModule } from './recetas/recetas.module';
     RutinaModule,
     EjercicioModule,
     PlanificacionModule,
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,26 +1,21 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMetricaDto } from './create-metrica.dto';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsArray } from 'class-validator';
 
 export class UpdateMetricaDto extends PartialType(CreateMetricaDto) {
-    @IsNotEmpty()
-    @IsNumber()
-    estatura?: number;
+    @IsString()
+    genero?: string;
 
-    @IsNotEmpty()
+    @IsNumber()
+    altura?: number;
+
     @IsNumber()
     peso?: number;
 
-    @IsNotEmpty()
-    @IsNumber()
-    pulsaciones?: number;
-
-    @IsNotEmpty()
     @IsString()
-    nivelActividad?: string;
+    objetivo?: string;
 
-    @IsNotEmpty()
-    @IsNumber()
-    masaMuscular?: number;
-
+    @IsArray()
+    @IsString({ each: true })
+    alergias?: string[];
 }

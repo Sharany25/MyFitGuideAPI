@@ -12,7 +12,6 @@ export class MetricasService {
     @InjectModel(Metrica.name) private readonly metricaModel: Model<Metrica>
   ) {}
 
-
   async create(createMetricaDto: CreateMetricaDto): Promise<Metrica> {
     const nuevaMetrica = new this.metricaModel({
       idMetricas: uuidv4(),

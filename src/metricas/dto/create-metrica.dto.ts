@@ -1,23 +1,23 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsArray } from 'class-validator';
 
 export class CreateMetricaDto {
   @IsNotEmpty()
+  @IsString()
+  genero: string;
+
+  @IsNotEmpty()
   @IsNumber()
-  estatura: number;
+  altura: number;
 
   @IsNotEmpty()
   @IsNumber()
   peso: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  pulsaciones: number;
-
-  @IsNotEmpty()
   @IsString()
-  nivelActividad: string;
+  objetivo: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  masaMuscular: number;
+  @IsArray()
+  @IsString({ each: true })
+  alergias: string[];
 }

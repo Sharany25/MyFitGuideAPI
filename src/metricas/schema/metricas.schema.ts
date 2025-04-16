@@ -6,20 +6,20 @@ export class Metrica extends Document {
   @Prop({ required: true })
   idMetricas: string;
 
-  @Prop()
-  estatura: number;
+  @Prop({ required: true })
+  genero: string;
 
-  @Prop()
+  @Prop({ required: true })
+  altura: number;
+
+  @Prop({ required: true })
   peso: number;
 
   @Prop()
-  pulsaciones: number;
+  objetivo: string;
 
-  @Prop()
-  nivelActividad: string;
-
-  @Prop()
-  masaMuscular: number;
+  @Prop({ type: [String] }) // Define alergias como un array de strings
+  alergias: string[];
 }
 
 export const MetricaSchema = SchemaFactory.createForClass(Metrica);

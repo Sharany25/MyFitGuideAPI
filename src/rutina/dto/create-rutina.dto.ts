@@ -9,7 +9,6 @@ export class CreateRutinaDto {
     @IsString()
     nombreRutina: string;
 
-    //Agregar FK de idEjercicio
     @IsNotEmpty()
     @IsString()
     descripcion: string;
@@ -23,5 +22,4 @@ export class CreateRutinaDto {
     @IsInt()
     repeticiones: number;
 
-    //Agregar FK de idUsuarios y idPlanificacion
 }
