@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Counter } from './schemas/counter.schema';
 import { Usuarios } from './schemas/usuario.schema';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -10,21 +9,20 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 export class UsuariosService {
   constructor(
     @InjectModel(Usuarios.name) private usuariosModel: Model<Usuarios>,
-    @InjectModel(Counter.name) private counterModel: Model<Counter>
   ) {}
 
-  // Método para obtener el siguiente ID de usuario
-  async getNextSequenceValue(sequenceName: string): Promise<number> {
-    const sequenceDocument = await this.counterModel.findOneAndUpdate(
-      { name: sequenceName },
-      { $inc: { sequence_value: 1 } },
-      { new: true, upsert: true }
-    );
-    return sequenceDocument.sequence_value;
+  // Método para obtener el siguiente ID de usuario de manera secuencial
+  async getNextId(): Promise<number> {
+    const lastUser = await this.usuariosModel
+      .findOne()
+      .sort({ idUsuario: -1 })
+      .exec();
+
+    return lastUser ? lastUser.idUsuario + 1 : 1; // Si no hay usuarios, empezamos desde 1
   }
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const nextId = await this.getNextSequenceValue('usuarios');
+    const nextId = await this.getNextId(); // Obtener el siguiente ID de usuario
 
     const createdUsuario = new this.usuariosModel({
       ...createUsuarioDto,
