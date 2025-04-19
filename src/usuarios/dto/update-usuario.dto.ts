@@ -13,13 +13,6 @@ export class UpdateUsuarioDto {
   @IsDateString()
   fechaNacimiento?: string;
 
-  @IsOptional()
-  @IsString()
-  genero?: string;
-
-  @IsOptional()
-  @IsString()
-  alergias?: string;
 
   @IsOptional()
   @IsString()

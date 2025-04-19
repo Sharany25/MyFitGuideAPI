@@ -20,4 +20,8 @@ export class CreateMetricaDto {
   @IsArray()
   @IsString({ each: true })
   alergias: string[];
+
+  @IsNotEmpty()
+  @IsString()
+  Presupuesto: string;
 }

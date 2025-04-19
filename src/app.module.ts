@@ -11,9 +11,15 @@ import { RutinaModule } from './rutina/rutina.module';
 import { IngredientesModule } from './ingredientes/ingredientes.module';
 import { RecetasModule } from './recetas/recetas.module';
 import { LoginModule } from './login/login.module';
+import { OpenaiModule } from './openai/openai.module'; // OpenaiModule ya está bien importado
+import { ConfigModule } from '@nestjs/config'; // Importa ConfigModule para cargar variables de entorno
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env', // Asegúrate de que tu archivo .env esté en la raíz del proyecto
+      isGlobal: true, // Hace que la configuración esté disponible globalmente
+    }),
     MongooseModule.forRoot('mongodb://localhost:27017/MyFitGuide'),
     UsuariosModule,
     MetricasModule,
@@ -24,6 +30,7 @@ import { LoginModule } from './login/login.module';
     EjercicioModule,
     PlanificacionModule,
     LoginModule,
+    OpenaiModule, // Este es tu módulo de OpenAI
   ],
   controllers: [AppController],
   providers: [AppService],

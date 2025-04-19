@@ -18,4 +18,8 @@ export class UpdateMetricaDto extends PartialType(CreateMetricaDto) {
     @IsArray()
     @IsString({ each: true })
     alergias?: string[];
+
+    @IsNotEmpty()
+    @IsString()
+    presupuesto?: string;
 }

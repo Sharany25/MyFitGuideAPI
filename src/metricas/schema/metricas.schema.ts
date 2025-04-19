@@ -20,6 +20,9 @@ export class Metrica extends Document {
 
   @Prop({ type: [String] }) // Define alergias como un array de strings
   alergias: string[];
+
+  @Prop({required: true})
+  presupuesto: string;
 }
 
 export const MetricaSchema = SchemaFactory.createForClass(Metrica);

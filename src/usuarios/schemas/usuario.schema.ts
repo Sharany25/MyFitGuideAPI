@@ -15,12 +15,6 @@ export class Usuarios {
   @Prop()
   fechaNacimiento?: Date;
 
-  @Prop()
-  genero?: string;
-
-  @Prop()
-  alergias?: string;
-
   @Prop({ required: true })
   contraseña: string;
 

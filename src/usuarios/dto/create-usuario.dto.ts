@@ -17,13 +17,6 @@ export class CreateUsuarioDto {
   @IsDateString()
   fechaNacimiento: string;
 
-  @IsOptional()
-  @IsString()
-  genero?: string;
-
-  @IsOptional()
-  @IsString()
-  alergias?: string;
 
   @IsNotEmpty()
   @IsString()
