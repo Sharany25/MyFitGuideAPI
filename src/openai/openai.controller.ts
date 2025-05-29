@@ -8,7 +8,6 @@ export class OpenaiController {
   @Post('dieta')
   async generarDieta(@Body() datos: any) {
     try {
-      // Pasamos solo los datos relevantes al servicio (sin userId)
       const resultado = await this.openaiService.generarDieta(datos);
       return resultado;
     } catch (error) {

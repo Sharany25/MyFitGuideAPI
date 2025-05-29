@@ -8,6 +8,8 @@ import { LoginModule } from './login/login.module';
 import { OpenaiModule } from './openai/openai.module'; // OpenaiModule ya está bien importado
 import { ConfigModule } from '@nestjs/config'; // Importa ConfigModule para cargar variables de entorno
 import { RutinasIAModule } from './rutinaia/rutinaia.module';
+import { PruebaDietaModule } from './prueba-dieta/prueba-dieta.module';
+import { PruebaRutinaModule } from './prueba-rutina/prueba-rutina.module';
 
 @Module({
   imports: [
@@ -21,6 +23,9 @@ import { RutinasIAModule } from './rutinaia/rutinaia.module';
     LoginModule,
     OpenaiModule,
     RutinasIAModule,
+    PruebaDietaModule,
+    PruebaRutinaModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

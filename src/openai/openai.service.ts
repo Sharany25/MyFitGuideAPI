@@ -22,14 +22,13 @@ export class OpenaiService {
       throw new Error('Faltan datos para generar la dieta');
     }
 
-    // Validación de campos obligatorios (sin userId)
     const { genero, altura, peso, objetivo, alergias, presupuesto } = datos;
 
     if (!genero || !altura || !peso || !objetivo || !presupuesto) {
       throw new Error('Faltan datos necesarios para generar la dieta');
     }
 
-    // Prompt para OpenAI (igual que antes)
+    // Prompt para OpenAI 
     const prompt = `
       Quiero que generes una dieta semanal personalizada basada en los siguientes datos del usuario:
 
@@ -45,7 +44,6 @@ export class OpenaiService {
     `;
 
     try {
-      // Llamada a OpenAI (sin cambios)
       const completion = await this.openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         messages: [{ role: 'user', content: prompt }],
@@ -53,7 +51,6 @@ export class OpenaiService {
 
       const resultado = completion.choices[0].message.content;
 
-      // Guardar en BD (sin userId)
       const nuevaDieta = new this.dietaModel({
         genero,
         altura,
