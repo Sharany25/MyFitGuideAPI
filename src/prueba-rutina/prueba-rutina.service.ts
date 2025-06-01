@@ -32,4 +32,9 @@ export class PruebaRutinaService {
   remove(id: string) {
     return this.rutinaModel.findByIdAndDelete(id).exec();
   }
+
+  // NUEVO: Buscar por userId
+  findByUserId(userId: number) {
+    return this.rutinaModel.findOne({ userId }).exec();
+  }
 }

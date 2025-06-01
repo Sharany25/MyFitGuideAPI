@@ -46,4 +46,12 @@ export class PruebaRutinaController {
     if (!deleted) throw new NotFoundException(`Rutina con ID ${id} no encontrada`);
     return deleted;
   }
+
+  // NUEVO: Buscar rutina por userId
+  @Get('usuario/:userId')
+  async findByUserId(@Param('userId') userId: string) {
+    const rutina = await this.rutinaService.findByUserId(Number(userId));
+    if (!rutina) throw new NotFoundException(`No se encontró rutina para este usuario`);
+    return rutina;
+  }
 }

@@ -1,4 +1,3 @@
-// src/prueba-dieta/prueba-dieta.service.ts
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -14,5 +13,10 @@ export class PruebaDietaService {
   async create(data: CreatePruebaDietaDto): Promise<PruebaDieta> {
     const nuevaDieta = new this.dietaModel(data);
     return nuevaDieta.save();
+  }
+
+  // Nuevo: Obtener dieta por userId
+  async findByUserId(userId: number): Promise<PruebaDieta | null> {
+    return this.dietaModel.findOne({ userId }).exec();
   }
 }

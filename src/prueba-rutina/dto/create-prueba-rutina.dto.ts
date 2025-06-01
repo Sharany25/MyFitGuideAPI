@@ -6,9 +6,14 @@ import {
   IsString,
   Max,
   Min,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreatePruebaRutinaDto {
+  @IsNotEmpty()
+  @IsNumber()
+  userId: number;
+
   @IsString()
   nombre: string;
 

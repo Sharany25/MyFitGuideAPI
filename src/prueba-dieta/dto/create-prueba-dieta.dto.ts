@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, IsArray } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreatePruebaDietaDto {
   @IsNotEmpty()
@@ -6,10 +7,12 @@ export class CreatePruebaDietaDto {
   genero: string;
 
   @IsNotEmpty()
+  @Type(() => Number)
   @IsNumber()
   altura: number;
 
   @IsNotEmpty()
+  @Type(() => Number)
   @IsNumber()
   peso: number;
 
@@ -22,6 +25,7 @@ export class CreatePruebaDietaDto {
   alergias: string[];
 
   @IsNotEmpty()
-  @IsString()
+  @Type(() => Number)
+  @IsNumber()
   presupuesto: number;
 }

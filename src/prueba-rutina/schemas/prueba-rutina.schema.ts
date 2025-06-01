@@ -6,6 +6,9 @@ export type PruebaRutinaDocument = PruebaRutina & Document;
 @Schema({ timestamps: true })
 export class PruebaRutina {
   @Prop({ required: true })
+  userId: number;      // <-- AGREGA ESTO
+
+  @Prop({ required: true })
   nombre: string;
 
   @Prop({ required: true })
