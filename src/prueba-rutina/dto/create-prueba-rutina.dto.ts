@@ -1,3 +1,5 @@
+// src/prueba-rutina/dto/create-prueba-rutina.dto.ts
+
 import {
   IsArray,
   IsIn,
@@ -6,13 +8,11 @@ import {
   IsString,
   Max,
   Min,
-  IsNotEmpty,
 } from 'class-validator';
 
 export class CreatePruebaRutinaDto {
-  @IsNotEmpty()
   @IsNumber()
-  userId: number;
+  userId: number; // <-- AGREGADO
 
   @IsString()
   nombre: string;

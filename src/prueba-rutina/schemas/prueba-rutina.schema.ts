@@ -1,3 +1,5 @@
+// src/prueba-rutina/schemas/prueba-rutina.schema.ts
+
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -6,7 +8,7 @@ export type PruebaRutinaDocument = PruebaRutina & Document;
 @Schema({ timestamps: true })
 export class PruebaRutina {
   @Prop({ required: true })
-  userId: number;      // <-- AGREGA ESTO
+  userId: number; // <-- AGREGADO
 
   @Prop({ required: true })
   nombre: string;
