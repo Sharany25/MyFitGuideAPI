@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config'; // Importa ConfigModule para carg
 import { RutinasIAModule } from './rutinaia/rutinaia.module';
 import { PruebaDietaModule } from './prueba-dieta/prueba-dieta.module';
 import { PruebaRutinaModule } from './prueba-rutina/prueba-rutina.module';
+import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PruebaRutinaModule } from './prueba-rutina/prueba-rutina.module';
     RutinasIAModule,
     PruebaDietaModule,
     PruebaRutinaModule,
+    UsuarioCompletoModule,
 
   ],
   controllers: [AppController],

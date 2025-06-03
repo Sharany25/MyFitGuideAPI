@@ -33,8 +33,8 @@ export class PruebaRutinaService {
     return this.rutinaModel.findByIdAndDelete(id).exec();
   }
 
-  // NUEVO: Buscar por userId
-  findByUserId(userId: number) {
+  // Buscar por userId (string)
+  findByUserId(userId: string) {
     return this.rutinaModel.findOne({ userId }).exec();
   }
 }

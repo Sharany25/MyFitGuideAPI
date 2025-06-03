@@ -4,6 +4,10 @@ import { Type } from 'class-transformer';
 export class CreatePruebaDietaDto {
   @IsNotEmpty()
   @IsString()
+  userId: string; // ← NUEVO
+
+  @IsNotEmpty()
+  @IsString()
   genero: string;
 
   @IsNotEmpty()

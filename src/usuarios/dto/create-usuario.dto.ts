@@ -17,7 +17,6 @@ export class CreateUsuarioDto {
   @IsDateString()
   fechaNacimiento: string;
 
-
   @IsNotEmpty()
   @IsString()
   contraseña: string;
@@ -26,7 +25,7 @@ export class CreateUsuarioDto {
   @IsString()
   ubicacion?: string;
 
-  @IsOptional() 
+  @IsOptional()
   @IsString()
   _id?: string;
 }

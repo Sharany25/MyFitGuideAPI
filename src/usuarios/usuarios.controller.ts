@@ -22,26 +22,22 @@ export class UsuariosController {
     private readonly loginService: LoginService,
   ) {}
 
-  // Crear nuevo usuario
   @Post()
   @HttpCode(201)
   async create(@Body() createUsuarioDto: CreateUsuarioDto) {
     return this.usuariosService.create(createUsuarioDto);
   }
 
-  // Obtener todos los usuarios
   @Get()
   async findAll() {
     return this.usuariosService.findAll();
   }
 
-  // Obtener un usuario por ID
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.usuariosService.findOne(id);
   }
 
-  // Actualizar un usuario
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -50,19 +46,16 @@ export class UsuariosController {
     return this.usuariosService.update(id, updateUsuarioDto);
   }
 
-  // Eliminar un usuario
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.usuariosService.remove(id);
   }
 
-  // Login de usuario
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     try {
       return await this.loginService.login(loginDto);
     } catch (error) {
-      // Delega el control si el error ya es Unauthorized
       if (error instanceof UnauthorizedException) {
         throw error;
       }

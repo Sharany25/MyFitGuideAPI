@@ -15,8 +15,8 @@ export class PruebaDietaService {
     return nuevaDieta.save();
   }
 
-  // Nuevo: Obtener dieta por userId
-  async findByUserId(userId: number): Promise<PruebaDieta | null> {
+  // Obtener dieta por userId
+  async findByUserId(userId: string): Promise<PruebaDieta | null> {
     return this.dietaModel.findOne({ userId }).exec();
   }
 }

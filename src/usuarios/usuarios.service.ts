@@ -4,36 +4,31 @@ import { Model } from 'mongoose';
 import { Usuarios } from './schemas/usuario.schema';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import * as bcrypt from 'bcrypt'; // Asegúrate de instalar bcrypt para el manejo seguro de contraseñas
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
   constructor(
-    @InjectModel(Usuarios.name) private usuariosModel: Model<Usuarios>,  // Inyección del modelo de Mongoose para Usuarios
+    @InjectModel(Usuarios.name) private usuariosModel: Model<Usuarios>,
   ) {}
 
-  // Crear un nuevo usuario
   async create(createUsuarioDto: CreateUsuarioDto): Promise<Usuarios> {
-    // Hash de la contraseña antes de guardarla
     const hashedPassword = await bcrypt.hash(createUsuarioDto.contraseña, 10);
     const createdUsuario = new this.usuariosModel({
       ...createUsuarioDto,
-      contraseña: hashedPassword, // Se guarda la contraseña hasheada
+      contraseña: hashedPassword,
     });
-    return createdUsuario.save(); // Guardar el usuario en la base de datos
+    return createdUsuario.save();
   }
 
-  // Actualizar un usuario existente
   async update(id: string, updateUsuarioDto: UpdateUsuarioDto): Promise<Usuarios> {
-    // Si se quiere actualizar la contraseña, se hace el hash antes de guardar
     if (updateUsuarioDto.contraseña) {
       updateUsuarioDto.contraseña = await bcrypt.hash(updateUsuarioDto.contraseña, 10);
     }
-    
     const updatedUsuario = await this.usuariosModel.findByIdAndUpdate(
       id,
       updateUsuarioDto,
-      { new: true } // Devuelve el documento actualizado
+      { new: true }
     ).exec();
 
     if (!updatedUsuario) {
@@ -43,7 +38,6 @@ export class UsuariosService {
     return updatedUsuario;
   }
 
-  // Buscar un usuario por ID
   async findOne(id: string): Promise<Usuarios> {
     const usuario = await this.usuariosModel.findById(id).exec();
     if (!usuario) {
@@ -52,12 +46,10 @@ export class UsuariosService {
     return usuario;
   }
 
-  // Buscar todos los usuarios
   async findAll(): Promise<Usuarios[]> {
     return this.usuariosModel.find().exec();
   }
 
-  // Eliminar un usuario por ID
   async remove(id: string): Promise<{ message: string }> {
     const removedUsuario = await this.usuariosModel.findByIdAndDelete(id).exec();
     if (!removedUsuario) {
@@ -68,12 +60,9 @@ export class UsuariosService {
 
   async validateUser(correoElectronico: string, contraseña: string): Promise<Usuarios | null> {
     const usuario = await this.usuariosModel.findOne({ correoElectronico }).lean().exec();
-    
     if (usuario && await bcrypt.compare(contraseña, usuario.contraseña)) {
       return usuario;
     }
-    
-    // Si no es válido, lanzar una excepción
     throw new UnauthorizedException('Credenciales incorrectas');
   }
 }

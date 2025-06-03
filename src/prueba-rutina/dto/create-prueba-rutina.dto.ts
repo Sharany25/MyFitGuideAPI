@@ -1,5 +1,3 @@
-// src/prueba-rutina/dto/create-prueba-rutina.dto.ts
-
 import {
   IsArray,
   IsIn,
@@ -11,8 +9,8 @@ import {
 } from 'class-validator';
 
 export class CreatePruebaRutinaDto {
-  @IsNumber()
-  userId: number; // <-- AGREGADO
+  @IsString()
+  userId: string; // <-- CORREGIDO a string
 
   @IsString()
   nombre: string;

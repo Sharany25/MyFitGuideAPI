@@ -6,6 +6,9 @@ export type PruebaDietaDocument = PruebaDieta & Document;
 @Schema({ timestamps: true })
 export class PruebaDieta {
   @Prop({ required: true })
+  userId: string; // ← NUEVO
+
+  @Prop({ required: true })
   genero: string;
 
   @Prop({ required: true })

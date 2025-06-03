@@ -8,7 +8,7 @@ export type PruebaRutinaDocument = PruebaRutina & Document;
 @Schema({ timestamps: true })
 export class PruebaRutina {
   @Prop({ required: true })
-  userId: number; // <-- AGREGADO
+  userId: string; // <-- AGREGADO
 
   @Prop({ required: true })
   nombre: string;

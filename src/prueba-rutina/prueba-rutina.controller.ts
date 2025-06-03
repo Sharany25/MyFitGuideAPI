@@ -47,10 +47,10 @@ export class PruebaRutinaController {
     return deleted;
   }
 
-  // NUEVO: Buscar rutina por userId
+  // Buscar rutina por userId (userId como string)
   @Get('usuario/:userId')
   async findByUserId(@Param('userId') userId: string) {
-    const rutina = await this.rutinaService.findByUserId(Number(userId));
+    const rutina = await this.rutinaService.findByUserId(userId);
     if (!rutina) throw new NotFoundException(`No se encontró rutina para este usuario`);
     return rutina;
   }

@@ -14,8 +14,9 @@ export class PruebaDietaController {
   // Nuevo: endpoint para obtener la dieta por userId
   @Get('usuario/:userId')
   async getByUserId(@Param('userId') userId: string) {
-    const dieta = await this.dietaService.findByUserId(Number(userId));
+    const dieta = await this.dietaService.findByUserId(userId); // <-- pásalo como string
     if (!dieta) throw new NotFoundException('No se encontró dieta para este usuario');
     return dieta;
   }
-}
+  }
+
