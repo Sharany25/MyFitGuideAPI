@@ -13,7 +13,6 @@ export class UpdateUsuarioDto {
   @IsDateString()
   fechaNacimiento?: string;
 
-
   @IsOptional()
   @IsString()
   contraseña?: string;
