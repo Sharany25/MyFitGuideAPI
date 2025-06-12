@@ -3,7 +3,8 @@ import { Document } from 'mongoose';
 
 export type UsuariosDocument = Usuarios & Document;
 
-@Schema()
+// AGREGA timestamps aquí
+@Schema({ timestamps: true })
 export class Usuarios {
   @Prop({ required: true, unique: true })
   correoElectronico: string;
@@ -19,6 +20,12 @@ export class Usuarios {
 
   @Prop()
   ubicacion?: string;
+
+  @Prop()
+  createdAt?: Date;   // <--- AGREGA ESTO
+  @Prop()
+  updatedAt?: Date;   // <--- Y ESTO
 }
+
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuarios);

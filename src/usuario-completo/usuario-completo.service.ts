@@ -25,9 +25,12 @@ export class UsuarioCompletoService {
     // 3. Buscar rutina (opcional, por userId)
     const rutina = await this.rutinaModel.findOne({ userId }).lean();
 
-    // 4. Armar el objeto combinado
+    // 4. Armar el objeto combinado, añadiendo fechaRegistro
     return {
-      usuario,
+      usuario: {
+        ...usuario,
+        fechaRegistro: usuario.createdAt ? usuario.createdAt : null, // <-- campo extra
+      },
       dieta: dieta || null,
       rutina: rutina || null,
     };
