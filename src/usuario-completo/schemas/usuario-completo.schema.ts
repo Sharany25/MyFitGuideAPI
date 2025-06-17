@@ -8,7 +8,7 @@ export type UsuarioCompletoDocument = UsuarioCompleto & Document;
 @Schema({ timestamps: true })
 export class UsuarioCompleto {
   @Prop({ required: true, unique: true })
-  userId: string; // Corresponde al id de usuario principal
+  userId: string;
 
   // Datos personales
   @Prop({ required: true })

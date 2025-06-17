@@ -1,10 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type DietaAIDocument = DietaAI & Document;
+export type DietaiaDocument = Dietaia & Document;
 
-@Schema()
-export class DietaAI {
+@Schema({ timestamps: true })
+export class Dietaia {
+  @Prop({ required: true })
+  userId: string;
+
   @Prop({ required: true })
   genero: string;
 
@@ -23,8 +26,15 @@ export class DietaAI {
   @Prop({ required: true })
   presupuesto: number;
 
+  @Prop({ type: Object })
+  resultado: any;
+
+  // Agrega explícitamente los timestamps:
   @Prop()
-  resultado: string;
+  createdAt?: Date;
+
+  @Prop()
+  updatedAt?: Date;
 }
 
-export const DietaAISchema = SchemaFactory.createForClass(DietaAI);
+export const DietaiaSchema = SchemaFactory.createForClass(Dietaia);

@@ -1,9 +1,13 @@
-// src/rutinasIA/schemas/rutina.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+export type RutinaDocument = Rutina & Document;
+
 @Schema({ timestamps: true })
-export class Rutina extends Document {
+export class Rutina {
+  @Prop({ required: true })
+  userId: string;
+
   @Prop()
   nombre: string;
 
@@ -19,9 +23,19 @@ export class Rutina extends Document {
   @Prop()
   dias: number;
 
-  @Prop()
-  rutinaGenerada: string;
-}
+  // Nuevo: rutina como objeto JSON o string
+  @Prop({ type: Object })
+  rutina: any;
 
+  @Prop()
+  lesiones?: string;
+
+  // Campos de timestamps explícitos para TypeScript
+  @Prop()
+  createdAt?: Date;
+
+  @Prop()
+  updatedAt?: Date;
+}
 
 export const RutinaSchema = SchemaFactory.createForClass(Rutina);

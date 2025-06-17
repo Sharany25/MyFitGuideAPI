@@ -11,7 +11,7 @@ async function bootstrap() {
   
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();  // Habilitar CORS globalmente
+  app.enableCors();
 
   app.use(json({ limit: '50mb' }));
 

@@ -1,10 +1,14 @@
-// src/rutinasIA/dto/crear-rutina.dto.ts
-import { IsString, IsNumber, IsArray, IsIn, Min, Max } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsNumber, IsArray, IsIn, Min, Max, IsOptional } from 'class-validator';
 
 export class CrearRutinaDto {
   @IsString()
+  userId: string;
+
+  @IsString()
   nombre: string;
 
+  @Type(() => Number)
   @IsNumber()
   edad: number;
 
@@ -15,8 +19,13 @@ export class CrearRutinaDto {
   @IsIn(['gimnasio', 'casa', 'calistenia'], { each: true })
   preferencias: string[];
 
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
   @Max(7)
   dias: number;
+
+  @IsString()
+  @IsOptional()
+  lesiones?: string;
 }

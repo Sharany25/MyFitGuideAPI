@@ -2,15 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Usuarios } from 'src/usuarios/schemas/usuario.schema';
-import { PruebaDieta } from '../prueba-dieta/schemas/prueba-dieta.schema';
-import { PruebaRutina } from '../prueba-rutina/schemas/prueba-rutina.schema';
+import { Dietaia } from 'src/dietaia/schemas/dietaia.schemas';
+import { Rutina } from 'src/rutinaia/schema/rutina.schema';
 
 @Injectable()
 export class UsuarioCompletoService {
   constructor(
     @InjectModel(Usuarios.name) private usuariosModel: Model<Usuarios>,
-    @InjectModel(PruebaDieta.name) private dietaModel: Model<PruebaDieta>,
-    @InjectModel(PruebaRutina.name) private rutinaModel: Model<PruebaRutina>,
+    @InjectModel(Dietaia.name) private dietaModel: Model<Dietaia>,      // <-- Cambiado aquí
+    @InjectModel(Rutina.name) private rutinaModel: Model<Rutina>,
   ) {}
 
   // Endpoint para obtener toda la info completa del usuario
