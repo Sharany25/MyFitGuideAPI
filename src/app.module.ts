@@ -10,6 +10,7 @@ import { PruebaDietaModule } from './prueba-dieta/prueba-dieta.module';
 import { PruebaRutinaModule } from './prueba-rutina/prueba-rutina.module';
 import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.module';
 import { DietaiaModule } from './dietaia/dietaia.module';
+import { FavoritosModule } from './favoritos/favoritos.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DietaiaModule } from './dietaia/dietaia.module';
     PruebaRutinaModule,
     UsuarioCompletoModule,
     DietaiaModule,
+    FavoritosModule,
 
   ],
   controllers: [AppController],
