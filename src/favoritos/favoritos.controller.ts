@@ -1,24 +1,37 @@
 import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
 import { FavoritosService } from './favoritos.service';
-import { CreateFavoritoDto } from './dto/create-favorito.dto';
-import { RemoveFavoritoDto } from './dto/remove-favorito.dto';
+import { CreateFavoritoComidaDto } from './dto/create-favorito.dto';
+import { CreateFavoritoEjercicioDto } from './dto/create-favorito.dto';
+import { RemoveFavoritoComidaDto } from './dto/remove-favorito.dto';
+import { RemoveFavoritoEjercicioDto } from './dto/remove-favorito.dto';
 
 @Controller('favoritos')
 export class FavoritosController {
   constructor(private readonly favoritosService: FavoritosService) {}
 
-  @Post()
-  agregar(@Body() dto: CreateFavoritoDto) {
-    return this.favoritosService.agregarFavorito(dto);
+  @Post('ejercicio')
+  agregarEjercicio(@Body() dto: CreateFavoritoEjercicioDto) {
+    return this.favoritosService.agregarEjercicioFavorito(dto);
   }
 
-  @Delete()
-  eliminar(@Body() dto: RemoveFavoritoDto) {
-    return this.favoritosService.eliminarFavorito(dto);
+  @Delete('ejercicio')
+  eliminarEjercicio(@Body() dto: RemoveFavoritoEjercicioDto) {
+    return this.favoritosService.eliminarEjercicioFavorito(dto);
+  }
+
+  @Post('comida')
+  async agregarComidaFavorita(@Body() dto: CreateFavoritoComidaDto) {
+    return this.favoritosService.agregarComidaFavorita(dto);
+  }
+
+  @Delete('comida')
+  eliminarComida(@Body() dto: RemoveFavoritoComidaDto) {
+    return this.favoritosService.eliminarComidaFavorita(dto);
   }
 
   @Get(':userId')
-  obtener(@Param('userId') userId: string) {
-    return this.favoritosService.obtenerFavoritos(userId);
+  async obtener(@Param('userId') userId: string) {
+    const favoritos = await this.favoritosService.obtenerFavoritos(userId);
+    return favoritos;
   }
 }
