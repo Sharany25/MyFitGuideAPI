@@ -1,31 +1,35 @@
-  import { IsString, IsNumber, IsArray, IsOptional, ArrayNotEmpty, IsNotEmpty } from 'class-validator';
+import { IsString, IsNumber, IsArray, IsOptional, IsNotEmpty } from 'class-validator';
 
-  export class CreateDietaiaDto {
-    @IsNotEmpty()
-    @IsString()
-    userId: string;
+export class CreateDietaiaDto {
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
 
-    @IsString()
-    genero: string;
+  @IsNotEmpty()
+  @IsString()
+  genero: string;
 
-    @IsNumber()
-    altura: number;
+  @IsNotEmpty()
+  @IsNumber()
+  altura: number;
 
-    @IsNumber()
-    peso: number;
+  @IsNotEmpty()
+  @IsNumber()
+  peso: number;
 
-    @IsString()
-    objetivo: string;
+  @IsNotEmpty()
+  @IsString()
+  objetivo: string;
 
-    @IsOptional()
-    @IsArray()
-    @IsString({ each: true })
-    alergias?: string[];
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  alergias?: string[];
 
-    @IsNumber()
-    presupuesto: number;
+  @IsNotEmpty()
+  @IsNumber()
+  presupuesto: number;
 
-    @IsOptional()
-    @IsString()
-    resultado?: string;
-  }
+  @IsOptional()
+  resultado?: any;
+}

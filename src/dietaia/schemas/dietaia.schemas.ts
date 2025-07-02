@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 
 export type DietaiaDocument = Dietaia & Document;
 
@@ -20,21 +20,14 @@ export class Dietaia {
   @Prop({ required: true })
   objetivo: string;
 
-  @Prop()
+  @Prop({ type: [String] })
   alergias: string[];
 
   @Prop({ required: true })
   presupuesto: number;
 
-  @Prop({ type: Object })
+  @Prop({ type: SchemaTypes.Mixed }) // <-- Aquí la clave para guardar JSON anidado correctamente
   resultado: any;
-
-  // Agrega explícitamente los timestamps:
-  @Prop()
-  createdAt?: Date;
-
-  @Prop()
-  updatedAt?: Date;
 }
 
 export const DietaiaSchema = SchemaFactory.createForClass(Dietaia);

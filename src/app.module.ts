@@ -6,8 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LoginModule } from './login/login.module';
 import { ConfigModule } from '@nestjs/config';
 import { RutinasIAModule } from './rutinaia/rutinaia.module';
-import { PruebaDietaModule } from './prueba-dieta/prueba-dieta.module';
-import { PruebaRutinaModule } from './prueba-rutina/prueba-rutina.module';
 import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.module';
 import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
@@ -22,8 +20,6 @@ import { FavoritosModule } from './favoritos/favoritos.module';
     UsuariosModule,
     LoginModule,
     RutinasIAModule,
-    PruebaDietaModule,
-    PruebaRutinaModule,
     UsuarioCompletoModule,
     DietaiaModule,
     FavoritosModule,
