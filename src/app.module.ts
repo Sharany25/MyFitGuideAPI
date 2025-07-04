@@ -9,6 +9,7 @@ import { RutinasIAModule } from './rutinaia/rutinaia.module';
 import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.module';
 import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
+import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FavoritosModule } from './favoritos/favoritos.module';
     UsuarioCompletoModule,
     DietaiaModule,
     FavoritosModule,
+    QuejaSugerenciaModule,
 
   ],
   controllers: [AppController],

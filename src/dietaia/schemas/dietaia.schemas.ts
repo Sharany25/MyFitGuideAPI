@@ -26,7 +26,7 @@ export class Dietaia {
   @Prop({ required: true })
   presupuesto: number;
 
-  @Prop({ type: SchemaTypes.Mixed }) // <-- Aquí la clave para guardar JSON anidado correctamente
+  @Prop({ type: SchemaTypes.Mixed })
   resultado: any;
 }
 
