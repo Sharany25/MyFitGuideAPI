@@ -19,16 +19,16 @@ export class QuejaSugerenciaController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.quejaSugerenciaService.findOne(id); // id como string
+    return this.quejaSugerenciaService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateQuejaSugerenciaDto: UpdateQuejaSugerenciaDto) {
-    return this.quejaSugerenciaService.update(id, updateQuejaSugerenciaDto); // id como string
+    return this.quejaSugerenciaService.update(id, updateQuejaSugerenciaDto); 
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.quejaSugerenciaService.remove(id); // id como string
+    return this.quejaSugerenciaService.remove(id);
   }
 }

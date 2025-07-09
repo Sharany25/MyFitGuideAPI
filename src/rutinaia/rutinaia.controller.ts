@@ -11,7 +11,6 @@ export class RutinasIAController {
     return this.rutinasIAService.generarRutina(crearRutinaDto);
   }
 
-  // ✅ GET rutina por userId
   @Get(':userId')
   async obtenerRutinaPorUsuario(@Param('userId') userId: string) {
     const rutina = await this.rutinasIAService.obtenerRutinaPorUserId(userId);

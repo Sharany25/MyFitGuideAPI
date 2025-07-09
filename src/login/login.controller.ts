@@ -1,4 +1,3 @@
-// src/login/login.controller.ts
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto } from './dto/create-login.dto';
@@ -10,7 +9,7 @@ export class LoginController {
   @Post()
   async login(@Body() loginDto: LoginDto) {
     try {
-      return await this.loginService.login(loginDto);  // Llamamos al servicio de login
+      return await this.loginService.login(loginDto);
     } catch (error) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }

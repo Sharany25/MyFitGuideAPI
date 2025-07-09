@@ -5,7 +5,6 @@ import { UsuarioCompletoService } from './usuario-completo.service';
 export class UsuarioCompletoController {
   constructor(private readonly usuarioCompletoService: UsuarioCompletoService) {}
 
-  // GET /usuario-completo/:userId
   @Get(':userId')
   async getUsuarioCompleto(@Param('userId') userId: string) {
     const data = await this.usuarioCompletoService.obtenerUsuarioCompleto(userId);

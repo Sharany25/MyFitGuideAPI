@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { QuejaSugerencia, QuejaSugerenciaDocument } from './schema/queja-sugerencia.schema';
@@ -6,55 +6,100 @@ import { CreateQuejaSugerenciaDto } from './dto/create-queja-sugerencia.dto';
 import { UpdateQuejaSugerenciaDto } from './dto/update-queja-sugerencia.dto';
 import * as nodemailer from 'nodemailer';
 import * as path from 'path';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
+type Estado = 'nuevo' | 'en revisión' | 'respondido' | 'cerrado';
 
 @Injectable()
 export class QuejaSugerenciaService {
+  private readonly logger = new Logger(QuejaSugerenciaService.name);
+
   constructor(
     @InjectModel(QuejaSugerencia.name)
     private readonly quejaSugerenciaModel: Model<QuejaSugerenciaDocument>,
   ) {}
 
   async create(createQuejaSugerenciaDto: CreateQuejaSugerenciaDto) {
-    const created = new this.quejaSugerenciaModel(createQuejaSugerenciaDto);
+    const created = new this.quejaSugerenciaModel({
+      ...createQuejaSugerenciaDto,
+      estado: 'nuevo',
+      fechaRespuesta: undefined,
+      respuesta: undefined,
+    });
     return created.save();
   }
 
   async findAll() {
-    return this.quejaSugerenciaModel.find().exec();
+    return this.quejaSugerenciaModel.find().sort({ createdAt: -1 }).exec();
   }
 
   async findOne(id: string) {
     return this.quejaSugerenciaModel.findById(id).exec();
   }
 
-  async update(id: string, updateQuejaSugerenciaDto: UpdateQuejaSugerenciaDto) {
-    const updated = await this.quejaSugerenciaModel.findByIdAndUpdate(id, updateQuejaSugerenciaDto, { new: true }).exec();
+  async update(id: string, updateDto: UpdateQuejaSugerenciaDto) {
+    const queja = await this.quejaSugerenciaModel.findById(id).exec();
+    if (!queja) throw new BadRequestException('No existe el registro');
 
-    // Enviar correo si la queja fue respondida y hay correo de contacto y respuesta
-    if (
-      updated &&
-      updated.estado === 'respondido' &&
-      updated.emailContacto &&
-      updateQuejaSugerenciaDto.respuesta
-    ) {
-      await this.enviarCorreoRespuesta(
-        updated.emailContacto,
-        updated.tipo,
-        updated.mensaje,
-        updateQuejaSugerenciaDto.respuesta
+    const estadoActual: Estado = queja.estado ?? 'nuevo';
+    const estadoNuevo: Estado = updateDto.estado ?? 'nuevo';
+
+
+    if (!this.puedeAvanzarEstado(estadoActual, estadoNuevo)) {
+      throw new BadRequestException(
+        `No se puede cambiar de "${estadoActual}" a "${estadoNuevo}".`
       );
     }
 
-    return updated;
+    if (estadoNuevo === 'respondido') {
+      if (!updateDto.respuesta?.trim()) {
+        throw new BadRequestException('La respuesta es obligatoria para marcar como respondido.');
+      }
+      queja.respuesta = updateDto.respuesta;
+      queja.fechaRespuesta = new Date();
+      if (queja.emailContacto) {
+        await this.enviarCorreoRespuesta(
+          queja.emailContacto,
+          queja.tipo,
+          queja.mensaje,
+          updateDto.respuesta
+        );
+      }
+    }
+
+    queja.estado = estadoNuevo;
+
+    await queja.save();
+    return queja;
+  }
+
+  private puedeAvanzarEstado(actual: Estado, nuevo: Estado): boolean {
+    const flujo: Record<Estado, Estado[]> = {
+      'nuevo': ['en revisión'],
+      'en revisión': ['respondido'],
+      'respondido': [],
+      'cerrado': [],
+    };
+    return flujo[actual].includes(nuevo);
   }
 
   async remove(id: string) {
     return this.quejaSugerenciaModel.findByIdAndDelete(id).exec();
   }
 
-  // Lógica para enviar el correo directamente aquí mismo
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async cerrarRespondidosAutomaticamente() {
+    const haceUnDia = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const result = await this.quejaSugerenciaModel.updateMany(
+      { estado: 'respondido', fechaRespuesta: { $lte: haceUnDia } },
+      { $set: { estado: 'cerrado' } }
+    );
+    if (result.modifiedCount) {
+      this.logger.log(`Cerradas automáticamente ${result.modifiedCount} quejas/sugerencias respondidas.`);
+    }
+  }
+
   private async enviarCorreoRespuesta(to: string, tipo: string, mensaje: string, respuesta: string) {
-    // Configura el transporter de nodemailer
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -63,10 +108,7 @@ export class QuejaSugerenciaService {
       },
     });
 
-    // Ruta absoluta a /assets/Email.jpg
     const imgPath = path.join(process.cwd(), 'assets', 'Email.jpg');
-
-    // HTML para el correo con imagen incrustada y diseño profesional
     const htmlContent = `
       <div style="max-width:450px;margin:0 auto;background:#23272b;border-radius:20px;overflow:hidden;box-shadow:0 6px 24px #0002;">
         <div style="background:linear-gradient(135deg,#23c6d8,#4ad991);padding:36px 0 18px 0;text-align:center;">
@@ -90,7 +132,6 @@ export class QuejaSugerenciaService {
       </div>
     `;
 
-    // Opciones del correo
     const mailOptions = {
       from: `"Soporte MyFitGuide" <${process.env.EMAIL_USER}>`,
       to,
@@ -99,11 +140,14 @@ export class QuejaSugerenciaService {
       attachments: [{
         filename: 'Email.jpg',
         path: imgPath,
-        cid: 'logoimg' // mismo cid que en el src del img
+        cid: 'logoimg'
       }]
     };
 
-    // Enviar el correo
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (err) {
+      this.logger.error("Error enviando correo de respuesta", err);
+    }
   }
 }

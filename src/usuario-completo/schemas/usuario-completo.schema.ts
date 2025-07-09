@@ -1,5 +1,3 @@
-// src/usuario-completo/schemas/usuario-completo.schema.ts
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -10,7 +8,6 @@ export class UsuarioCompleto {
   @Prop({ required: true, unique: true })
   userId: string;
 
-  // Datos personales
   @Prop({ required: true })
   nombre: string;
 
@@ -23,7 +20,6 @@ export class UsuarioCompleto {
   @Prop()
   ubicacion?: string;
 
-  // Datos de Dieta
   @Prop()
   genero?: string;
 
@@ -42,7 +38,6 @@ export class UsuarioCompleto {
   @Prop()
   presupuesto?: number;
 
-  // Datos de Rutina
   @Prop()
   edad?: number;
 

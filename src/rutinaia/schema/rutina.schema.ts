@@ -23,14 +23,12 @@ export class Rutina {
   @Prop()
   dias: number;
 
-  // Nuevo: rutina como objeto JSON o string
   @Prop({ type: Object })
   rutina: any;
 
   @Prop()
   lesiones?: string;
 
-  // Campos de timestamps explícitos para TypeScript
   @Prop()
   createdAt?: Date;
 

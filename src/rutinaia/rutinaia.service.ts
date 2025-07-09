@@ -123,7 +123,6 @@ REGLAS:
     `.trim();
   }
 
-  // ✅ Método para GET /rutinas-ia/:userId
   async obtenerRutinaPorUserId(
     userId: string,
   ): Promise<{ userId: string; rutina: any; creado: Date }> {

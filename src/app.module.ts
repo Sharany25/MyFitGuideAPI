@@ -10,6 +10,7 @@ import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.modul
 import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
 import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.modul
     DietaiaModule,
     FavoritosModule,
     QuejaSugerenciaModule,
+    AdminModule,
 
   ],
   controllers: [AppController],

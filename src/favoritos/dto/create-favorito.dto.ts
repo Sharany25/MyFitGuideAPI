@@ -1,5 +1,3 @@
-// create-favorito.dto.ts
-
 export class CreateFavoritoEjercicioDto {
   userId: string;
   ejercicio: string; 

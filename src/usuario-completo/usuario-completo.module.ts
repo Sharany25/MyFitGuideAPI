@@ -11,7 +11,7 @@ import { LoginModule } from 'src/login/login.module';
   imports: [
     MongooseModule.forFeature([
       { name: Usuarios.name, schema: UsuarioSchema },
-      { name: Dietaia.name, schema: DietaiaSchema },  // <-- Usando dietaia
+      { name: Dietaia.name, schema: DietaiaSchema },
       { name: Rutina.name, schema: RutinaSchema },
     ]),
     forwardRef(() => LoginModule),

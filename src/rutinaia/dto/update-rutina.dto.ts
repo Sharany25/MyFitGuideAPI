@@ -1,4 +1,3 @@
-// src/rutinasIA/dto/update-rutina.dto.ts
 import { IsString, IsNumber, IsArray, IsIn, Min, Max, IsOptional } from 'class-validator';
 
 export class UpdateRutinaDto {

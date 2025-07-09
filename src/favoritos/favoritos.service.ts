@@ -11,7 +11,6 @@ import { RemoveFavoritoComidaDto } from './dto/remove-favorito.dto';
 export class FavoritosService {
   constructor(@InjectModel(Favorito.name) private favoritoModel: Model<Favorito>) {}
 
-  // Agregar ejercicio a favoritos
   async agregarEjercicioFavorito(dto: CreateFavoritoEjercicioDto) {
     const favorito = await this.favoritoModel.findOne({ userId: dto.userId });
     if (!favorito) {
@@ -26,7 +25,6 @@ export class FavoritosService {
     return favorito;
   }
 
-  // Eliminar ejercicio de favoritos
   async eliminarEjercicioFavorito(dto: RemoveFavoritoEjercicioDto) {
     const favorito = await this.favoritoModel.findOne({ userId: dto.userId });
     if (!favorito) return null;
@@ -37,7 +35,6 @@ export class FavoritosService {
     return favorito;
   }
 
-  // Agregar comida a favoritos
   async agregarComidaFavorita(dto: CreateFavoritoComidaDto) {
     const favorito = await this.favoritoModel.findOne({ userId: dto.userId });
     if (!favorito) {
@@ -52,7 +49,6 @@ export class FavoritosService {
     return favorito;
   }
 
-  // Eliminar comida de favoritos
   async eliminarComidaFavorita(dto: RemoveFavoritoComidaDto) {
     const favorito = await this.favoritoModel.findOne({ userId: dto.userId });
     if (!favorito) return null;
@@ -63,7 +59,6 @@ export class FavoritosService {
     return favorito;
   }
 
-  // Obtener favoritos de un usuario
   async obtenerFavoritos(userId: string) {
     const favorito = await this.favoritoModel.findOne({ userId });
     return {

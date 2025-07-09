@@ -1,4 +1,3 @@
-// src/rutinasIA/rutinasIA.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RutinasIAService } from './rutinaia.service';
