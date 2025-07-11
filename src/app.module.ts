@@ -11,7 +11,8 @@ import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
 import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
 import { AdminModule } from './admin/admin.module';
-
+import { AuthModule } from './admin/auth/auth.module';
+import { MailerModule } from './admin/mailer/mailer.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,6 +28,8 @@ import { AdminModule } from './admin/admin.module';
     FavoritosModule,
     QuejaSugerenciaModule,
     AdminModule,
+    AuthModule,
+    MailerModule,
 
   ],
   controllers: [AppController],
