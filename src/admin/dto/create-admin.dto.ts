@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
+//Metodo de creación para administrador
 export class CreateAdminDto {
   @IsEmail()
   correo: string;

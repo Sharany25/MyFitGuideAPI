@@ -3,6 +3,7 @@ import { Document } from 'mongoose';
 
 export type AdminDocument = Admin & Document;
 
+//Schema o esqueleto de guardado en BD-MongoDB.
 @Schema()
 export class Admin {
   @Prop({ required: true, unique: true })

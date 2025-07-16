@@ -5,6 +5,7 @@ import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { ConfigModule } from '@nestjs/config';
 
+//Modulo de guardado en BD-MongoDB.
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Admin.name, schema: AdminSchema }]),

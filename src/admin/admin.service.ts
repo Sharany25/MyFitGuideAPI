@@ -54,6 +54,7 @@ export class AdminService {
       },
     });
 
+    // Cuerpo del envio de correo con token de validación.
     const logoUrl = 'https://i.imgur.com/QhMLrZZ.jpeg';
     const html = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #23282d; padding: 0; margin: 0;">
@@ -89,9 +90,13 @@ export class AdminService {
     });
   }
 
-  // Verificar el token
+  // Verificar el token con protección contra correo/token undefined
   async verifyToken(correo: string, token: string): Promise<boolean> {
-    const admin = await this.adminModel.findOne({ correo: correo.trim().toLowerCase() });
+    if (!correo || !token) return false;
+    const correoTrim = typeof correo === "string" ? correo.trim().toLowerCase() : "";
+    if (!correoTrim) return false;
+
+    const admin = await this.adminModel.findOne({ correo: correoTrim });
     if (!admin || !admin.verificationToken) {
       return false;
     }
@@ -104,8 +109,13 @@ export class AdminService {
     return true;
   }
 
+  // LOGIN corregido para que el campo isVerified vaya dentro del objeto admin
   async login(correo: string, contrasena: string) {
-    const admin = await this.adminModel.findOne({ correo: correo.trim().toLowerCase() });
+    if (!correo || !contrasena) {
+      return { message: "Correo o contraseña incorrectos", status: 401 };
+    }
+    const correoTrim = typeof correo === "string" ? correo.trim().toLowerCase() : "";
+    const admin = await this.adminModel.findOne({ correo: correoTrim });
     if (!admin) {
       return { message: "Correo o contraseña incorrectos", status: 401 };
     }
@@ -113,13 +123,14 @@ export class AdminService {
     if (!match) {
       return { message: "Correo o contraseña incorrectos", status: 401 };
     }
+    // Aquí va isVerified correctamente dentro de admin:
     return {
-      isVerified: admin.isVerified,
       admin: {
         id: admin._id,
         correo: admin.correo,
         foto: admin.foto,
-        rol: admin.rol
+        rol: admin.rol,
+        isVerified: admin.isVerified
       },
       status: 200
     };
