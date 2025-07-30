@@ -18,7 +18,7 @@ import { AdminModule } from './admin/admin.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://mongo:MHofpiGYletkiEpWIZHlHzVyusXXchQy@shuttle.proxy.rlwy.net:11891'),
+    MongooseModule.forRoot('mongodb://localhost:27017/MyFitGuide'),
     UsuariosModule,
     LoginModule,
     RutinasIAModule,
