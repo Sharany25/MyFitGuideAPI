@@ -27,7 +27,6 @@ import { AdminModule } from './admin/admin.module';
     FavoritosModule,
     QuejaSugerenciaModule,
     AdminModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],
