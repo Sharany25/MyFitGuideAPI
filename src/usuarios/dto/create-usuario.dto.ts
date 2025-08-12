@@ -23,9 +23,5 @@ export class CreateUsuarioDto {
 
   @IsOptional()
   @IsString()
-  ubicacion?: string;
-
-  @IsOptional()
-  @IsString()
   _id?: string;
 }

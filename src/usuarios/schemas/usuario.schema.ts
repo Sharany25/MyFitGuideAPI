@@ -17,14 +17,17 @@ export class Usuarios {
   @Prop({ required: true })
   contraseña: string;
 
+  // Campos para la recuperación de contraseña
+  @Prop({ unique: true, sparse: true })
+  resetPasswordToken?: string;
+
   @Prop()
-  ubicacion?: string;
+  resetPasswordExpires?: Date;
 
   @Prop()
   createdAt?: Date;
   @Prop()
   updatedAt?: Date;
 }
-
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuarios);

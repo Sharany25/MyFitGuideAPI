@@ -16,8 +16,4 @@ export class UpdateUsuarioDto {
   @IsOptional()
   @IsString()
   contraseña?: string;
-
-  @IsOptional()
-  @IsString()
-  ubicacion?: string;
 }

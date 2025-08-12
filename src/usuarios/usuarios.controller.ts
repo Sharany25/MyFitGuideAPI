@@ -14,6 +14,8 @@ import { LoginService } from 'src/login/login.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { LoginDto } from 'src/login/dto/create-login.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
@@ -33,10 +35,12 @@ export class UsuariosController {
     return this.usuariosService.findAll();
   }
 
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.usuariosService.findOne(id);
   }
+
 
   @Patch(':id')
   async update(
@@ -61,5 +65,17 @@ export class UsuariosController {
       }
       throw new UnauthorizedException('Error al iniciar sesión');
     }
+  }
+
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return this.usuariosService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.usuariosService.resetPassword(resetPasswordDto);
   }
 }
