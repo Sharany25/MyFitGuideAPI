@@ -17,6 +17,9 @@ export class Usuarios {
   @Prop({ required: true })
   contraseña: string;
 
+  @Prop()
+  foto: string;
+
   // Campos para la recuperación de contraseña
   @Prop({ unique: true, sparse: true })
   resetPasswordToken?: string;

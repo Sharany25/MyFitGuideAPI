@@ -3,8 +3,8 @@ export class UsuarioCompletoDto {
   nombre: string;
   correoElectronico: string;
   fechaNacimiento: string;
-  ubicacion?: string;
-
+  foto: string;
+  
   // Dieta
   genero?: string;
   altura?: number;

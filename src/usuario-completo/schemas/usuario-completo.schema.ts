@@ -18,8 +18,8 @@ export class UsuarioCompleto {
   fechaNacimiento?: Date;
 
   @Prop()
-  ubicacion?: string;
-
+  foto?: string;
+  
   @Prop()
   genero?: string;
 
