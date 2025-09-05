@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { urlencoded, json } from 'express';
 import * as dotenv from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
+import 'reflect-metadata';
 
 
 async function bootstrap() {

@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LoginModule } from './login/login.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RutinasIAModule } from './rutinaia/rutinaia.module';
 import { UsuarioCompletoModule } from './usuario-completo/usuario-completo.module';
 import { DietaiaModule } from './dietaia/dietaia.module';
@@ -18,7 +18,13 @@ import { AdminModule } from './admin/admin.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://localhost:27017/MyFitGuide'),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     UsuariosModule,
     LoginModule,
     RutinasIAModule,
