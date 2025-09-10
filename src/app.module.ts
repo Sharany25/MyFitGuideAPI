@@ -11,6 +11,7 @@ import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
 import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
 import { AdminModule } from './admin/admin.module';
+import { PushModule } from './web-push/push.module';
 
 @Module({
   imports: [
@@ -33,10 +34,9 @@ import { AdminModule } from './admin/admin.module';
     FavoritosModule,
     QuejaSugerenciaModule,
     AdminModule,
+    PushModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
-//P1 conexion a railway
