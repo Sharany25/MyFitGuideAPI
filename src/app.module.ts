@@ -12,6 +12,7 @@ import { FavoritosModule } from './favoritos/favoritos.module';
 import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
 import { AdminModule } from './admin/admin.module';
 import { PushModule } from './web-push/push.module';
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { PushModule } from './web-push/push.module';
     QuejaSugerenciaModule,
     AdminModule,
     PushModule,
+    ChatbotModule,
   ],
   controllers: [AppController],
   providers: [AppService],

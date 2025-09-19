@@ -1,0 +1,74 @@
+[
+  {
+    "id": "descripcion_app",
+    "tags": ["qué es MyFitGuide", "para qué sirve la app", "funcionalidades de la app"],
+    "respuesta": "MyFitGuide es una aplicación de bienestar integral que te ayuda a gestionar tu salud y fitness. Puedes seguir tu progreso, crear planes de dieta y rutinas de ejercicio personalizados, encontrar gimnasios cercanos, y mucho más.",
+    "funcionalidad": "Descripción general de la aplicación."
+  },
+  {
+    "id": "recuperar_contrasena",
+    "tags": ["olvidé mi contraseña", "recuperar contraseña", "no puedo iniciar sesión", "acceso a la cuenta"],
+    "respuesta": "Si olvidaste tu contraseña, ve a la pantalla de inicio de sesión y toca en '¿Olvidaste tu contraseña?'. Sigue las instrucciones para recuperarla.",
+    "funcionalidad": "Acceso y autenticación de usuarios."
+  },
+  {
+    "id": "crear_cuenta",
+    "tags": ["crear cuenta", "registrarse", "nueva cuenta", "registro", "registrarse en la app"],
+    "respuesta": "Para crear una nueva cuenta, toca en 'Crear cuenta' en la pantalla de inicio. Llena los datos que se te piden para completar el registro.",
+    "funcionalidad": "Registro de nuevos usuarios."
+  },
+  {
+    "id": "ver_progreso",
+    "tags": ["ver mi progreso", "índice de masa corporal", "IMC", "mi peso", "datos de progreso"],
+    "respuesta": "Tu progreso se muestra en la pantalla principal. Aquí puedes ver tu Índice de Masa Corporal (IMC) y otros datos importantes como edad, altura, peso y objetivo.",
+    "funcionalidad": "Visualización del progreso y datos personales del usuario."
+  },
+  {
+    "id": "ubicar_gimnasios",
+    "tags": ["gimnasios cercanos", "gym", "encontrar un gimnasio", "ubicar gym", "gimnasios en el mapa"],
+    "respuesta": "Para encontrar gimnasios cercanos, ve al menú lateral y selecciona 'Gym cercanos'. La app te pedirá permiso para acceder a tu ubicación y te mostrará los gimnasios en el mapa.",
+    "funcionalidad": "Geolocalización y búsqueda de gimnasios."
+  },
+  {
+    "id": "enviar_sugerencias",
+    "tags": ["sugerencias", "reportar un problema", "enviar queja", "comentarios"],
+    "respuesta": "Si quieres enviar una queja o sugerencia, abre el menú lateral y toca en 'Quejas y Sugerencias'. Podrás escribir tu mensaje y enviarlo.",
+    "funcionalidad": "Sistema de soporte y feedback del usuario."
+  },
+  {
+    "id": "cerrar_sesion",
+    "tags": ["cerrar sesión", "salir de la cuenta", "desloguearse"],
+    "respuesta": "Para cerrar sesión, ve al menú lateral y selecciona 'Cerrar sesión'. La app te pedirá confirmar la acción antes de salir.",
+    "funcionalidad": "Gestión de la sesión del usuario."
+  },
+  {
+    "id": "consultar_dieta",
+    "tags": ["plan de dieta", "comidas", "ver mi dieta", "dieta inteligente"],
+    "respuesta": "En la pantalla principal, toca en 'Dietas Inteligentes' para ver tu plan de alimentación. Puedes ver el detalle de cada comida y sus ingredientes.",
+    "funcionalidad": "Consulta de planes de alimentación personalizados."
+  },
+  {
+    "id": "personalizar_dieta",
+    "tags": ["cambiar comida", "personalizar mi dieta", "editar mi plan", "sustituir comida"],
+    "respuesta": "Para cambiar una comida en tu plan, toca el icono del lápiz junto a ella. Puedes escribir una nueva comida y la app recalculará sus valores nutricionales.",
+    "funcionalidad": "Edición y personalización del plan de dieta."
+  },
+  {
+    "id": "consultar_rutina",
+    "tags": ["mi rutina", "entrenamiento", "ver ejercicios", "rutinas a tu medida", "entrenamiento diario"],
+    "respuesta": "Para ver tu rutina de entrenamiento, ve a la pantalla principal y toca en 'Rutinas a tu Medida'. Verás el plan completo con el detalle de cada ejercicio.",
+    "funcionalidad": "Consulta de rutinas de entrenamiento."
+  },
+  {
+    "id": "gestion_favoritos",
+    "tags": ["favoritos", "comidas favoritas", "ejercicios favoritos", "guardar comida", "guardar ejercicio"],
+    "respuesta": "Puedes añadir comidas y ejercicios a tus favoritos. Para verlos, ve al menú lateral y selecciona 'Favoritos'. Desde ahí puedes ver y gestionar tu lista.",
+    "funcionalidad": "Gestión de elementos favoritos (comidas y ejercicios)."
+  },
+  {
+    "id": "historial_cambios",
+    "tags": ["historial", "cambios de plan", "ver mi historial", "modificaciones"],
+    "respuesta": "En el menú lateral encontrarás la opción 'Historial de cambios', donde podrás ver un registro de las modificaciones que has hecho en tu plan de dieta y rutina.",
+    "funcionalidad": "Registro y visualización del historial de cambios."
+  }
+]
