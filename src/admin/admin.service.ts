@@ -44,19 +44,27 @@ export class AdminService {
   }
 
   async sendVerificationEmail(email: string, token: string) {
-    // 🔍 LOG: Verifica si las variables de entorno están bien cargadas
     const emailUser = this.configService.get('EMAIL_USER');
     const emailPass = this.configService.get('EMAIL_PASSWORD');
 
-    console.log('EMAIL_USER:', emailUser);
-    console.log('EMAIL_PASSWORD:', emailPass ? '[OK]' : '[NOT SET]');
+    if (!emailUser || !emailPass) {
+      console.error('ERROR: EMAIL_USER o EMAIL_PASSWORD no configurados');
+      return;
+    }
 
+    // Configuración explícita para Gmail SMTP en puerto 465 (SSL)
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // SSL
       auth: {
         user: emailUser,
         pass: emailPass,
       },
+      // Opcional: tiempo de espera para conexiones, evita que timeout sea infinito
+      connectionTimeout: 10000,
+      greetingTimeout: 5000,
+      socketTimeout: 10000,
     });
 
     const logoUrl = 'https://i.imgur.com/QhMLrZZ.jpeg';
@@ -93,7 +101,6 @@ export class AdminService {
         subject: 'Tu código de activación de administrador | MyFitGuide',
         html,
       });
-
       console.log('Correo enviado con éxito:', info.messageId);
     } catch (error) {
       console.error('Error al enviar correo:', error);
