@@ -14,7 +14,6 @@ export class AdminService {
     private readonly configService: ConfigService,
   ) {}
 
-  // Crear un admin (contraseña y token se encriptan)
   async create(adminDto: CreateAdminDto) {
     const exists = await this.adminModel.findOne({ correo: adminDto.correo.trim().toLowerCase() });
     if (exists) throw new BadRequestException('El correo ya está registrado');
@@ -44,17 +43,22 @@ export class AdminService {
     };
   }
 
-  // Envío de correo de verificación con token
   async sendVerificationEmail(email: string, token: string) {
+    // 🔍 LOG: Verifica si las variables de entorno están bien cargadas
+    const emailUser = this.configService.get('EMAIL_USER');
+    const emailPass = this.configService.get('EMAIL_PASSWORD');
+
+    console.log('EMAIL_USER:', emailUser);
+    console.log('EMAIL_PASSWORD:', emailPass ? '[OK]' : '[NOT SET]');
+
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: this.configService.get('EMAIL_USER'),
-        pass: this.configService.get('EMAIL_PASSWORD'),
+        user: emailUser,
+        pass: emailPass,
       },
     });
 
-    // Cuerpo del envio de correo con token de validación.
     const logoUrl = 'https://i.imgur.com/QhMLrZZ.jpeg';
     const html = `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #23282d; padding: 0; margin: 0;">
@@ -82,15 +86,20 @@ export class AdminService {
       </div>
     `;
 
-    await transporter.sendMail({
-      from: `"Soporte MyFitGuide" <${this.configService.get('EMAIL_USER')}>`,
-      to: email,
-      subject: 'Tu código de activación de administrador | MyFitGuide',
-      html,
-    });
+    try {
+      const info = await transporter.sendMail({
+        from: `"Soporte MyFitGuide" <${emailUser}>`,
+        to: email,
+        subject: 'Tu código de activación de administrador | MyFitGuide',
+        html,
+      });
+
+      console.log('Correo enviado con éxito:', info.messageId);
+    } catch (error) {
+      console.error('Error al enviar correo:', error);
+    }
   }
 
-  // Verificar el token con protección contra correo/token undefined
   async verifyToken(correo: string, token: string): Promise<boolean> {
     if (!correo || !token) return false;
     const correoTrim = typeof correo === "string" ? correo.trim().toLowerCase() : "";
@@ -109,7 +118,6 @@ export class AdminService {
     return true;
   }
 
-  // LOGIN corregido para que el campo isVerified vaya dentro del objeto admin
   async login(correo: string, contrasena: string) {
     if (!correo || !contrasena) {
       return { message: "Correo o contraseña incorrectos", status: 401 };
@@ -123,7 +131,6 @@ export class AdminService {
     if (!match) {
       return { message: "Correo o contraseña incorrectos", status: 401 };
     }
-    // Aquí va isVerified correctamente dentro de admin:
     return {
       admin: {
         id: admin._id,
