@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/nestjs-app # Directorio final en tu EC2
+hooks:
+  BeforeInstall:
+    - location: scripts/stop_app.sh # 🛑 Detener la app
+      timeout: 60
+      runas: root
+  AfterInstall:
+    - location: scripts/install_dependencies.sh # 📦 Instalar dependencias
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_app.sh # ▶️ Iniciar la app
+      timeout: 60
+      runas: root

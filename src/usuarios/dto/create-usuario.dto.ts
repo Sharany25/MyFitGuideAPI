@@ -21,6 +21,7 @@ export class CreateUsuarioDto {
   @IsString()
   contraseña: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   foto?: string;

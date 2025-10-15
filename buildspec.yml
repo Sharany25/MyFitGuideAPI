@@ -1,0 +1,28 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      # Instalar Node.js y pnpm dentro del entorno de CodeBuild
+      - echo "Instalando Node.js y pnpm..."
+      - curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+      - sudo apt-get install -y nodejs
+      - npm install -g pnpm
+  pre_build:
+    commands:
+      - echo "Instalando dependencias de Node.js..."
+      - pnpm install
+  build:
+    commands:
+      - echo "Compilando NestJS..."
+      - pnpm run build
+artifacts:
+  files:
+    # Empaquetar todo el contenido de la carpeta 'dist' (el código compilado)
+    - '**/*' 
+    # Incluir archivos esenciales no compilados en la raíz del paquete
+    - 'package.json'
+    - 'pnpm-lock.yaml'
+    - 'appspec.yml'
+    - 'scripts/*'
+  base-directory: dist 
+  discard-paths: no
