@@ -29,19 +29,40 @@ jobs:
           head -n 3 $HOME/.ssh/id_ed25519
           cat $HOME/.ssh/known_hosts
 
-      - name: Check remote PATH
+      - name: Deploy to EC2 - Pull code
         shell: bash
         run: |
-          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -ilc 'echo \$PATH'"
-
-      - name: Deploy to EC2
-        shell: bash
-        run: |
-          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -ilc '
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             cd /home/ubuntu/MyFitGuideAPI &&
             git fetch origin main &&
-            git reset --hard origin/main &&
-            npm install &&
-            npm run build &&
+            git reset --hard origin/main
+          "
+
+      - name: Deploy to EC2 - Install dependencies
+        shell: bash
+        run: |
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\"
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
+            cd /home/ubuntu/MyFitGuideAPI &&
+            npm install
+          "
+
+      - name: Deploy to EC2 - Build project
+        shell: bash
+        run: |
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\"
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
+            cd /home/ubuntu/MyFitGuideAPI &&
+            npm run build
+          "
+
+      - name: Deploy to EC2 - Restart pm2
+        shell: bash
+        run: |
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\"
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
             pm2 restart myfitguide-api || pm2 start dist/main.js --name myfitguide-api
-          '"
+          "
