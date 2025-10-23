@@ -34,11 +34,12 @@ jobs:
         env:
           RSYNC_RSH: "ssh -p ${{ secrets.EC2_PORT }} -o StrictHostKeyChecking=no"
 
-      - name: Install dependencies on EC2 and restart app
+      - name: Install dependencies on EC2 and restart app with PM2
         run: |
-          ssh -p ${{ secrets.EC2_PORT }} -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh -t -p ${{ secrets.EC2_PORT }} -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            source ~/.profile
+            source ~/.bashrc
             cd ~/MyFitGuideAPI
             npm install --production
-            pm2 stop all || true
-            pm2 start dist/main.js --name nestjs-api
+            pm2 reload myfitguide-api || pm2 start dist/main.js --name myfitguide-api
           EOF
