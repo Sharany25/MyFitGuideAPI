@@ -29,12 +29,15 @@ jobs:
           head -n 3 $HOME/.ssh/id_ed25519
           cat $HOME/.ssh/known_hosts
 
+      - name: Check remote PATH
+        shell: bash
+        run: |
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -ilc 'echo \$PATH'"
+
       - name: Deploy to EC2
         shell: bash
         run: |
-          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -c '
-            export NVM_DIR=\"$HOME/.nvm\"
-            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -ilc '
             cd /home/ubuntu/MyFitGuideAPI &&
             git fetch origin main &&
             git reset --hard origin/main &&
