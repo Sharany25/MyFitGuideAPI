@@ -13,51 +13,55 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH in temp dir
+      - name: Setup SSH
         shell: bash
         run: |
           export SSH_DIR=$(mktemp -d)
           echo "SSH dir: $SSH_DIR"
-          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > "$SSH_DIR/id_ed25519"
-          chmod 600 "$SSH_DIR/id_ed25519"
+          # Escribir la clave privada preservando saltos de línea
+          cat << 'EOF' > "$SSH_DIR/id_rsa"
+          ${{ secrets.EC2_SSH_KEY }}
+          EOF
+          
+          chmod 600 "$SSH_DIR/id_rsa"
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> "$SSH_DIR/known_hosts"
           ssh-keyscan -H github.com >> "$SSH_DIR/known_hosts"
           echo "SSH_DIR=$SSH_DIR" >> $GITHUB_ENV
 
-      - name: Deploy to EC2 - Pull latest code
+      - name: Pull latest code on EC2
         shell: bash
         run: |
-          ssh -i "$SSH_DIR/id_ed25519" -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+          ssh -i $SSH_DIR/id_rsa -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             cd /home/ubuntu/MyFitGuideAPI &&
             git fetch origin main &&
             git reset --hard origin/main
           "
 
-      - name: Deploy to EC2 - Install dependencies
+      - name: Install dependencies on EC2
         shell: bash
         run: |
-          ssh -i "$SSH_DIR/id_ed25519" -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            export NVM_DIR=\"$HOME/.nvm\"
+          ssh -i $SSH_DIR/id_rsa -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\" &&
             [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
             cd /home/ubuntu/MyFitGuideAPI &&
             npm install
           "
 
-      - name: Deploy to EC2 - Build project
+      - name: Build project on EC2
         shell: bash
         run: |
-          ssh -i "$SSH_DIR/id_ed25519" -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            export NVM_DIR=\"$HOME/.nvm\"
+          ssh -i $SSH_DIR/id_rsa -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\" &&
             [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
             cd /home/ubuntu/MyFitGuideAPI &&
             npm run build
           "
 
-      - name: Deploy to EC2 - Restart pm2
+      - name: Restart pm2 on EC2
         shell: bash
         run: |
-          ssh -i "$SSH_DIR/id_ed25519" -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
-            export NVM_DIR=\"$HOME/.nvm\"
+          ssh -i $SSH_DIR/id_rsa -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+            export NVM_DIR=\"$HOME/.nvm\" &&
             [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
             pm2 restart myfitguide-api || pm2 start dist/main.js --name myfitguide-api
           "
