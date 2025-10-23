@@ -13,6 +13,9 @@ import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.modul
 import { AdminModule } from './admin/admin.module';
 import { PushModule } from './web-push/push.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
+import { FirebaseModule } from './firebase/firebase.module';
+import { NotificationsModule } from './notificaciones/notificaciones.module';
+
 
 @Module({
   imports: [
@@ -37,6 +40,8 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     AdminModule,
     PushModule,
     ChatbotModule,
+    FirebaseModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

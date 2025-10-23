@@ -39,6 +39,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "express": "^5.0.1",
+    "firebase-admin": "^13.5.0",
     "fuse.js": "^7.1.0",
     "mongoose": "^8.13.2",
     "nodemailer": "^7.0.5",
