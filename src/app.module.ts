@@ -11,7 +11,6 @@ import { DietaiaModule } from './dietaia/dietaia.module';
 import { FavoritosModule } from './favoritos/favoritos.module';
 import { QuejaSugerenciaModule } from './queja-sugerencia/queja-sugerencia.module';
 import { AdminModule } from './admin/admin.module';
-import { PushModule } from './web-push/push.module';
 import { ChatbotModule } from './chatbot/chatbot.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { NotificationsModule } from './notificaciones/notificaciones.module';
@@ -38,7 +37,6 @@ import { NotificationsModule } from './notificaciones/notificaciones.module';
     FavoritosModule,
     QuejaSugerenciaModule,
     AdminModule,
-    PushModule,
     ChatbotModule,
     FirebaseModule,
     NotificationsModule,
