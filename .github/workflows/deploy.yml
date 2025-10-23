@@ -32,7 +32,9 @@ jobs:
       - name: Deploy to EC2
         shell: bash
         run: |
-          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -lc '
+          ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "bash -c '
+            export NVM_DIR=\"$HOME/.nvm\"
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
             cd /home/ubuntu/MyFitGuideAPI &&
             git fetch origin main &&
             git reset --hard origin/main &&
