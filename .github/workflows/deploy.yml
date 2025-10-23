@@ -37,8 +37,7 @@ jobs:
       - name: Install dependencies on EC2 and restart app with PM2
         run: |
           ssh -t -p ${{ secrets.EC2_PORT }} -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            source ~/.profile
-            source ~/.bashrc
+            export PATH=$PATH:/home/ubuntu/.nvm/versions/node/v22.20.0/bin
             cd ~/MyFitGuideAPI
             npm install --production
             pm2 reload myfitguide-api || pm2 start dist/main.js --name myfitguide-api
