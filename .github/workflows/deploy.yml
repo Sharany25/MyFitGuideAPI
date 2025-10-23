@@ -19,7 +19,13 @@ jobs:
           mkdir -p $HOME/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > $HOME/.ssh/id_ed25519
           chmod 600 $HOME/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> $HOME/.ssh/known_hosts
+
+      - name: Debug SSH Setup
+        shell: bash
+        run: |
+          ls -la $HOME/.ssh/
+          head -n 3 $HOME/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} || echo "ssh-keyscan failed"
 
       - name: Deploy to EC2
         shell: bash
