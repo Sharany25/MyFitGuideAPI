@@ -16,9 +16,14 @@ jobs:
       - name: Setup SSH
         shell: bash
         run: |
+          echo "HOME is $HOME"
+          whoami
+          ls -ld $HOME
+
           mkdir -p $HOME/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > $HOME/.ssh/id_ed25519
           chmod 600 $HOME/.ssh/id_ed25519
+
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> $HOME/.ssh/known_hosts
           ssh-keyscan -H github.com >> $HOME/.ssh/known_hosts
 
@@ -29,7 +34,7 @@ jobs:
           head -n 3 $HOME/.ssh/id_ed25519
           cat $HOME/.ssh/known_hosts
 
-      - name: Deploy to EC2 - Pull code
+      - name: Deploy to EC2 - Pull latest code
         shell: bash
         run: |
           ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
@@ -43,7 +48,7 @@ jobs:
         run: |
           ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             export NVM_DIR=\"$HOME/.nvm\"
-            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
             cd /home/ubuntu/MyFitGuideAPI &&
             npm install
           "
@@ -53,7 +58,7 @@ jobs:
         run: |
           ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             export NVM_DIR=\"$HOME/.nvm\"
-            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
             cd /home/ubuntu/MyFitGuideAPI &&
             npm run build
           "
@@ -63,6 +68,6 @@ jobs:
         run: |
           ssh -i $HOME/.ssh/id_ed25519 -o StrictHostKeyChecking=yes ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
             export NVM_DIR=\"$HOME/.nvm\"
-            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\" &&
+            [ -s \"$NVM_DIR/nvm.sh\" ] && \. \"$NVM_DIR/nvm.sh\"
             pm2 restart myfitguide-api || pm2 start dist/main.js --name myfitguide-api
           "
