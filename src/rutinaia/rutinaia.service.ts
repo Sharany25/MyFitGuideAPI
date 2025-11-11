@@ -34,15 +34,23 @@ export class RutinasIAService {
         max_tokens: 2200,
       });
 
-      const contenido = respuesta.choices[0].message.content;
+      let contenido = respuesta.choices[0].message.content;
+
       if (!contenido) {
         throw new BadRequestException('No se recibió rutina de OpenAI');
+      }
+
+      // Limpiar contenido de texto extra y comillas sobrantes
+      contenido = contenido.trim();
+      if (contenido.startsWith('"') && contenido.endsWith('"')) {
+        contenido = contenido.slice(1, -1).replace(/\\"/g, '"');
       }
 
       let rutinaObj: any;
       try {
         rutinaObj = JSON.parse(contenido);
 
+        // Validaciones de estructura
         if (
           !rutinaObj.rutina ||
           !Array.isArray(rutinaObj.rutina) ||
@@ -59,7 +67,7 @@ export class RutinasIAService {
       } catch (e) {
         this.logger.error('Error parseando la rutina generada', e);
         throw new BadRequestException(
-          'La respuesta de OpenAI no tiene el formato esperado.',
+          'La respuesta de OpenAI no tiene el formato esperado. Intenta nuevamente.'
         );
       }
 
@@ -74,7 +82,7 @@ export class RutinasIAService {
         'Error al generar rutina con OpenAI:',
         error?.message || error,
       );
-      throw new BadRequestException('Error al generar la rutina.');
+      throw new BadRequestException('Error al generar la rutina. Intenta nuevamente.');
     }
   }
 
@@ -140,6 +148,7 @@ REGLAS:
     return {
       userId: rutina.userId,
       rutina: rutina.rutina,
-      creado: rutina.createdAt as Date};
+      creado: rutina.createdAt as Date,
+    };
   }
 }
