@@ -7,11 +7,10 @@ import { Dietaia, DietaiaDocument } from './schemas/dietaia.schemas';
 import { CreateDietaiaDto } from './dto/create-dietaia.dto';
 import { UpdateDietaiaDto } from './dto/update-dietaia.dto';
 
-// Define el tipo de dato esperado de OpenAI para tener tipado estricto
 export interface DietaAIGenerada {
   semana: {
     dia: string;
-    comidas: any[]; // Lo ideal sería definir la estructura interna de 'comidas'
+    comidas: any[];
     totales_dia: { [key: string]: number };
   }[];
   totales_semana: { [key: string]: number };
@@ -145,16 +144,6 @@ Excluye ingredientes a los que es alérgico el usuario, usa alimentos comunes en
       creado: dieta.createdAt,
     };
   }
-
-  // --- MÉTODO: OBTENER TODAS LAS DIETAS ---
-  /**
-   * Obtiene todas las dietas de la base de datos. 
-   * Nota: Este endpoint debe estar protegido con un Guard de Administrador/Superusuario.
-   */
-  async findAll(): Promise<Dietaia[]> {
-    return this.dietaiaModel.find().lean();
-  }
-  // ----------------------------------------------
 
   async modificarPlatilloConIA(
     userId: string,

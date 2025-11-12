@@ -29,21 +29,6 @@ export class DietaiaController {
     return await this.dietaiaService.create(createDietaiaDto);
   }
 
-  // --- NUEVO MÉTODO: OBTENER TODAS LAS DIETAS ---
-  /**
-   * Endpoint: GET /dieta-ia
-   * Retorna todas las dietas en la BD. 
-   * IMPORTANTE: En producción, este endpoint debe usar un @UseGuards() 
-   * para restringir el acceso solo a administradores.
-   */
-  // La ruta base @Get() debe ir ANTES que @Get(':param')
-  @Get()
-  async findAll() {
-    return this.dietaiaService.findAll();
-  }
-  // ----------------------------------------------
-
-
   /**
    * Endpoint: GET /dieta-ia/:userId
    * Obtiene la dieta más reciente de un usuario.
