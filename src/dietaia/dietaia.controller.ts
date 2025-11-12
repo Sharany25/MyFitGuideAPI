@@ -8,11 +8,11 @@ import {
   NotFoundException,
   HttpException,
   HttpStatus,
-  // Note: No necesitamos importar UseGuards, pero es la práctica recomendada para el nuevo endpoint.
 } from '@nestjs/common';
-import { DietaiaService } from './dietaia.service';
+import { DietaiaService, DietaListado } from './dietaia.service'; // Importamos DietaListado
 import { CreateDietaiaDto } from './dto/create-dietaia.dto';
 import { UpdateDietaiaDto } from './dto/update-dietaia.dto';
+import { Dietaia } from './schemas/dietaia.schemas'; // Importamos Dietaia para el tipo completo
 
 @Controller('dieta-ia')
 export class DietaiaController {
@@ -28,22 +28,42 @@ export class DietaiaController {
     // Si el servicio lanza una excepción (ej: BadRequestException), NestJS la maneja automáticamente.
     return await this.dietaiaService.create(createDietaiaDto);
   }
-
+  
+  // --- ENDPOINT: GET /dieta-ia/:userId (VERSIÓN LIGERA - FIX CRASH) ---
   /**
    * Endpoint: GET /dieta-ia/:userId
-   * Obtiene la dieta más reciente de un usuario.
+   * Obtiene la dieta más reciente de un usuario, EXCLUYENDO el JSON de 'resultado' (para evitar el crash).
+   * La aplicación cliente debe llamar a este endpoint en pantallas de resumen.
    */
   @Get(':userId')
-  async obtenerDietaPorUsuario(@Param('userId') userId: string) {
+  async obtenerDietaLigeraPorUsuario(@Param('userId') userId: string): Promise<DietaListado> {
     const dieta = await this.dietaiaService.getDietaSemanaPorUsuario(userId);
-    // Nota: El servicio ya lanza NotFoundException, pero lo dejamos aquí por consistencia.
     if (!dieta) {
       throw new NotFoundException(
-        `No se encontró dieta para el usuario con ID: ${userId}`,
+        `No se encontró dieta ligera para el usuario con ID: ${userId}`,
       );
     }
     return dieta;
   }
+  // -------------------------------------------------------------------
+
+  // --- ENDPOINT: GET /dieta-ia/:userId/detalle (VERSIÓN COMPLETA) ---
+  /**
+   * Endpoint: GET /dieta-ia/:userId/detalle
+   * Obtiene la dieta COMPLETA, incluyendo el JSON grande de 'resultado'.
+   * Solo debe ser llamado cuando el cliente va a renderizar la tabla de comidas.
+   */
+  @Get(':userId/detalle')
+  async obtenerDietaCompletaPorUsuario(@Param('userId') userId: string): Promise<Dietaia> {
+    const dieta = await this.dietaiaService.getDietaCompleta(userId);
+    if (!dieta) {
+      throw new NotFoundException(
+        `No se encontró dieta completa para el usuario con ID: ${userId}`,
+      );
+    }
+    return dieta;
+  }
+  // -------------------------------------------------------------------
 
   /**
    * Endpoint: PATCH /dieta-ia/:userId
@@ -54,8 +74,6 @@ export class DietaiaController {
     @Param('userId') userId: string,
     @Body() updateDietaiaDto: UpdateDietaiaDto,
   ) {
-    // Si el servicio falla (ej: NotFoundException), lo manejará el filtro.
-    // Si queremos un manejo de error específico para DB/Mongoose, mantenemos el try/catch.
     try {
       const updatedDieta = await this.dietaiaService.update(userId, updateDietaiaDto);
       if (!updatedDieta) {
@@ -89,8 +107,6 @@ export class DietaiaController {
       );
     }
 
-    // Aquí mantenemos el try/catch para capturar y estandarizar los errores de OpenAI/Parseo
-    // que vienen del servicio como BadRequestException, y errores de Mongoose.
     try {
       const resultado = await this.dietaiaService.modificarPlatilloConIA(
         userId,

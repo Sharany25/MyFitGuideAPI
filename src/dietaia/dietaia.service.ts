@@ -16,6 +16,10 @@ export interface DietaAIGenerada {
   totales_semana: { [key: string]: number };
 }
 
+// NUEVA INTERFAZ: Representa la Dieta sin el campo resultado (payload grande)
+export interface DietaListado extends Omit<Dietaia, 'resultado'> {}
+
+
 @Injectable()
 export class DietaiaService {
   private openai: OpenAI;
@@ -31,28 +35,22 @@ export class DietaiaService {
 
   /**
    * Genera y guarda una dieta semanal usando la API de OpenAI.
-   * Se utiliza 'gpt-4o' y response_format: 'json_object' para garantizar JSON válido.
    */
   async create(createDietaiaDto: CreateDietaiaDto): Promise<{ mensaje: string; resultado: DietaAIGenerada }> {
     const { genero, altura, peso, objetivo, alergias, presupuesto } = createDietaiaDto;
 
-    // Validación temprana (aunque el pipe de validación de NestJS ya lo haría)
     if (!genero || !altura || !peso || !objetivo || !presupuesto) {
-      // Esta validación ya está cubierta por el DTO y ValidationPipe
       throw new BadRequestException('Faltan datos necesarios para generar la dieta');
     }
 
-    // 1. Construcción del Prompt (Se mantiene la lógica detallada del prompt)
     const prompt = this.buildDietaPrompt(genero, altura, peso, objetivo, alergias, presupuesto);
 
     try {
-      // 2. Llamada a OpenAI con garantía de JSON (Modelo gpt-4o recomendado)
       const completion = await this.openai.chat.completions.create({
-        model: 'gpt-4o', // Usar un modelo moderno que soporte JSON Mode
+        model: 'gpt-4o', 
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
         max_tokens: 4096,
-        // *** ESTA ES LA CLAVE PARA EVITAR EL ERROR DE JSON PARSE ***
         response_format: { type: 'json_object' }, 
       });
 
@@ -62,36 +60,64 @@ export class DietaiaService {
         throw new BadRequestException('No se recibió contenido JSON de OpenAI.');
       }
 
-      // 3. Parseo Directo: El 'json_object' garantiza que el string es parseable.
-      // Ya no necesitamos regex ni sanitización compleja.
       const resultadoJSON: DietaAIGenerada = JSON.parse(jsonString);
 
-      // 4. Persistencia en la base de datos
       const nuevaDieta = new this.dietaiaModel({
         ...createDietaiaDto,
         resultado: resultadoJSON,
         userId: createDietaiaDto.userId,
-        createdAt: new Date(), // Añadir fecha de creación si no está en el Schema
+        createdAt: new Date(),
       });
 
       await nuevaDieta.save();
 
       return { mensaje: 'Dieta generada exitosamente', resultado: resultadoJSON };
     } catch (error) {
-      // 5. Manejo de Errores: Capturar errores de OpenAI y de JSON.parse
       this.logger.error('Error durante la generación o persistencia de la dieta:', error);
       
-      // Si el error es una instancia de Error, lanzamos un error controlado.
-      // Si el error es de OpenAI (por API Key, rate limit, etc.), es 500.
       if (error.status === 400 || error instanceof BadRequestException) {
-         // Mantener el 400 si fue un error de validación interna.
          throw error;
       }
       
-      // Error genérico de la llamada a la API o del parseo (Internal Server Error)
       throw new BadRequestException('Error al obtener o procesar la respuesta de OpenAI. Por favor, inténtelo de nuevo.');
     }
   }
+
+  // --- MÉTODO EXISTENTE MODIFICADO: VERSIÓN LIGERA (SIN JSON GRANDE) ---
+  /**
+   * Obtiene la dieta más reciente de un usuario, excluyendo el campo 'resultado'.
+   * Este es el endpoint de bajo peso para la UI principal (evita el crash).
+   */
+  async getDietaSemanaPorUsuario(userId: string): Promise<DietaListado> {
+    const dieta = await this.dietaiaModel.findOne({ userId })
+      .sort({ createdAt: -1 })
+      .select('-resultado') // <--- FIX CRÍTICO: Excluir el campo masivo
+      .lean() as DietaListado; 
+      
+    if (!dieta) {
+      throw new NotFoundException('No existe una dieta ligera para este usuario');
+    }
+    
+    // El objeto devuelto (DietaListado) es ligero y ya no contiene el JSON masivo.
+    return dieta;
+  }
+  
+  // --- NUEVO MÉTODO: OBTENER DIETA COMPLETA (CON JSON GRANDE) ---
+  /**
+   * Obtiene la dieta más reciente de un usuario, incluyendo el campo 'resultado' COMPLETO.
+   * Este endpoint solo debe ser llamado por la pantalla de detalle.
+   */
+  async getDietaCompleta(userId: string): Promise<Dietaia> {
+    const dieta = await this.dietaiaModel.findOne({ userId })
+      .sort({ createdAt: -1 })
+      .lean() as Dietaia; // Devolver el objeto completo (con resultado)
+
+    if (!dieta || !dieta.resultado) {
+      throw new NotFoundException('No existe una dieta completa para este usuario');
+    }
+    return dieta;
+  }
+  // --------------------------------------------------------
 
   // Refactorización: Mover la lógica de prompt a un método privado (SRP)
   private buildDietaPrompt(genero: string, altura: number, peso: number, objetivo: string, alergias?: string[], presupuesto?: number): string {
@@ -131,20 +157,7 @@ Excluye ingredientes a los que es alérgico el usuario, usa alimentos comunes en
     `;
   }
 
-  // --- Otros métodos se mantienen iguales (get, modificarPlatilloConIA, update) ---
   
-  async getDietaSemanaPorUsuario(userId: string): Promise<{ userId: string; resultado: DietaAIGenerada; creado: Date | undefined }> {
-    const dieta = await this.dietaiaModel.findOne({ userId }).sort({ createdAt: -1 }).lean() as { userId: string; resultado: DietaAIGenerada; createdAt?: Date };
-    if (!dieta || !dieta.resultado) {
-      throw new NotFoundException('No existe una dieta detallada para este usuario');
-    }
-    return {
-      userId: dieta.userId,
-      resultado: dieta.resultado,
-      creado: dieta.createdAt,
-    };
-  }
-
   async modificarPlatilloConIA(
     userId: string,
     dia: string,
@@ -207,17 +220,6 @@ Devuelve solo el siguiente JSON:
       throw new BadRequestException(`No se encontró el tipo de comida ${tipoComida} en el día ${dia}`);
     }
 
-    // Se asume que 'comidaObj' tiene una propiedad para el platillo o se reemplaza.
-    // Depende de la estructura exacta de 'comidas' que genera la IA.
-    // Asumiendo que se modifica un campo dentro del objeto comidaObj:
-    // comidaObj.platillo = nuevoPlatilloEstructurado.platillo; 
-    // comidaObj.ingredientes = nuevoPlatilloEstructurado.ingredientes;
-    // ...
-
-    // Por ahora, solo reemplazaremos el objeto si la estructura de 'comidas' es plana.
-    // Si la estructura de 'comidas' en el JSON original es: [{ tipo: 'Desayuno', ...datos_del_platillo... }], 
-    // entonces deberíamos asignar las nuevas propiedades.
-
     Object.assign(comidaObj, nuevoPlatilloEstructurado); 
 
     dietaExistente.markModified('resultado');
@@ -234,7 +236,6 @@ Devuelve solo el siguiente JSON:
     }
 
     Object.assign(dietaExistente, updateDietaiaDto);
-    // **Importante:** Mongoose necesita markModified si actualizas un subdocumento
     dietaExistente.markModified('resultado'); 
     await dietaExistente.save();
 
